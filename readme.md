@@ -27,3 +27,5 @@ const bucket = new gcp.storage.Bucket("bucket-test", {}, {
 export const bucketName = bucket.url;
 
 ```
+
+Available on npm: https://www.npmjs.com/package/pulumi-gcpx-project.

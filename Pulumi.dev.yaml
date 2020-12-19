@@ -1,0 +1,4 @@
+encryptionsalt: v1:lfOWgyHsHE0=:v1:f4qaYqitTTR9Id15:cYoisz3ynbIVDiFIY0GmGX6jIK1TkQ==
+config:
+  gcp:project: ""
+  test-pulumi:billingAccount: 019821-EF3FFA-E638B0

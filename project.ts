@@ -4,24 +4,26 @@ import * as random from "@pulumi/random";
 
 export class Project extends pulumi.ComponentResource {
     public readonly provider: gcp.Provider;
-    public readonly projectId;
+    public readonly projectId: pulumi.Output<string>;
     
-    constructor(name, args: ProjectArgs, opts?) {
+    constructor(name: string, args: ProjectArgs, opts?: pulumi.CustomResourceOptions) {
         super("gcpx:organizations:Project", name, {}, opts);
+        
         const projectStack = `${pulumi.getStack()}-${pulumi.getProject()}`
-
+        
         const randomProjectId = new random.RandomString(`${projectStack}-random-id`, {
             length: 8,
             special: false,
             upper: false
         }, { parent: this });
-        
-        const projectId = pulumi.interpolate`${projectStack}-${randomProjectId.result}`;
+
+        // Due to GCP restrictions the project id needs to be less than 30 chars
+        const projectId = args.id ?? randomProjectId.result.apply(rpid => `${projectStack}-${rpid}`.substring(0,29));
 
         const myProject = new gcp.organizations.Project(projectStack, {
-            // Due to GCP restrictions the project id needs to be less than 30 chars
-            projectId: projectId.apply(pid => pid.substring(0,29)),
+            projectId: projectId, 
             billingAccount: args.billingAccount,
+            name: args.name ?? projectId
         }, { parent: this, deleteBeforeReplace: true });
 
         const projectProvider = new gcp.Provider(`${projectStack}-provider`, {
@@ -43,4 +45,15 @@ export interface ProjectArgs {
      * A required id for billing on project
      */
     billingAccount: pulumi.Input<string>;
+
+    /**
+     * Optional input for name
+     */
+    name?: pulumi.Input<string>;
+
+    /**
+     * Optional input for id
+     */
+    id?: pulumi.Input<string>;
+
 }

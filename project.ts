@@ -24,7 +24,7 @@ export class Project extends pulumi.ComponentResource {
         }, { parent: this, deleteBeforeReplace: true });
 
         const projectProvider = new gcp.Provider(`${projectStack}-provider`, {
-            project: myProject.id.apply(id => id.replace("projects/", ""))
+            project: myProject.id.apply(id => id.replace("projects/", "").substring(0, 29))
         }, { parent: this });
 
         this.provider = projectProvider;

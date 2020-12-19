@@ -3,7 +3,7 @@ This simple component is designed to make creating gcp projects easier. In GCP, 
 
 Also, even if you decide to write this code in your Pulumi project, you have to come up with unique names for a project id and create a provider so that you can actually deploy resources into that project. 
 
-Both of which are handled by this component. 
+Both are handled by this component. 
 
 
 Example Usage:

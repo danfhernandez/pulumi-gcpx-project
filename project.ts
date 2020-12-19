@@ -8,13 +8,14 @@ export class Project extends pulumi.ComponentResource {
     
     constructor(name, args: ProjectArgs, opts?) {
         super("gcpx:organizations:Project", name, {}, opts);
-        const randomProjectId = new random.RandomString("random-project-id", {
+        const projectStack = `${pulumi.getStack()}-${pulumi.getProject()}`
+
+        const randomProjectId = new random.RandomString(`${projectStack}-random-id`, {
             length: 8,
             special: false,
             upper: false
         }, { parent: this });
-
-        const projectStack = `${pulumi.getStack()}-${pulumi.getProject()}`
+        
         const projectId = pulumi.interpolate`${projectStack}-${randomProjectId.result}`;
 
         const myProject = new gcp.organizations.Project(projectStack, {
@@ -22,7 +23,7 @@ export class Project extends pulumi.ComponentResource {
             billingAccount: args.billingAccount
         }, { parent: this, deleteBeforeReplace: true });
 
-        const projectProvider = new gcp.Provider("project-provider", {
+        const projectProvider = new gcp.Provider(`${projectStack}-provider`, {
             project: myProject.id.apply(id => id.replace("projects/", ""))
         }, { parent: this });
 

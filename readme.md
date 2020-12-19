@@ -1,7 +1,9 @@
+
+Example Usage:
+```
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
-import * as random from "@pulumi/random";
-import {Project} from "./project";
+import { Project } from "pulumi-gcpx-project";
 
 const config = new pulumi.Config();
 const billingAccount = config.require("billingAccount");
@@ -16,3 +18,5 @@ const bucket = new gcp.storage.Bucket("bucket-test", {}, {
 
 // Export the DNS name of the bucket
 export const bucketName = bucket.url;
+
+```

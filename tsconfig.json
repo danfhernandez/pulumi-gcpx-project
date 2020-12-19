@@ -11,9 +11,10 @@
         "noFallthroughCasesInSwitch": true,
         "noImplicitReturns": true,
         "forceConsistentCasingInFileNames": true,
-        "noImplicitAny": false
+        "noImplicitAny": false,
+        "declaration" : true
     },
     "files": [
-        "index.ts"
+        "project.ts"
     ]
 }

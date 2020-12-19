@@ -16,15 +16,16 @@ export class Project extends pulumi.ComponentResource {
             upper: false
         }, { parent: this });
         
-        const projectId = pulumi.interpolate`${projectStack}-${randomProjectId.result}`;
+        // Due to GCP restrictions the project id needs to be less than 30 chars
+        const projectId = pulumi.interpolate`${projectStack.substring(0, 20)}-${randomProjectId.result}`;
 
         const myProject = new gcp.organizations.Project(projectStack, {
             projectId: projectId,
-            billingAccount: args.billingAccount
+            billingAccount: args.billingAccount,
         }, { parent: this, deleteBeforeReplace: true });
 
         const projectProvider = new gcp.Provider(`${projectStack}-provider`, {
-            project: myProject.id.apply(id => id.replace("projects/", "").substring(0, 29))
+            project: myProject.id.apply(id => id.replace("projects/", ""))
         }, { parent: this });
 
         this.provider = projectProvider;

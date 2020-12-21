@@ -34,8 +34,7 @@ export class Project extends pulumi.ComponentResource {
         if (args.enabledServiceApis) {
             args.enabledServiceApis.forEach((service, index) => {
                 let serviceApi = new gcp.projects.Service("service-"+index, {
-                    service: service, 
-                    disableOnDestroy: true
+                    service: service
                 }, {provider: projectProvider, parent: this})
             });
         }

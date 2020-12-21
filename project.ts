@@ -30,6 +30,16 @@ export class Project extends pulumi.ComponentResource {
             project: myProject.id.apply(id => id.replace("projects/", ""))
         }, { parent: this });
 
+        // Enable services if provided, eventually including an enum would be nice... 
+        if (args.enabledServiceApis) {
+            args.enabledServiceApis.forEach((service, index) => {
+                let serviceApi = new gcp.projects.Service("service-"+index, {
+                    service: service, 
+                    disableOnDestroy: true
+                }, {provider: projectProvider, parent: this})
+            });
+        }
+
         this.provider = projectProvider;
         this.projectId = myProject.id;
 
@@ -56,4 +66,8 @@ export interface ProjectArgs {
      */
     id?: pulumi.Input<string>;
 
+    /**
+     * Optional list of services to enable for project. I.e. compute.googleapis.com
+     */
+    enabledServiceApis?: pulumi.Input<string>[];
 }

@@ -7,7 +7,8 @@ const config = new pulumi.Config();
 const billingAccount = config.require("billingAccount");
 
 const project = new Project("my-project", {
-    billingAccount: billingAccount
+    billingAccount: billingAccount,
+    enabledServiceApis: ["compute.googleapis.com"]
 });
 
 const bucket = new gcp.storage.Bucket("bucket-test", {}, {
